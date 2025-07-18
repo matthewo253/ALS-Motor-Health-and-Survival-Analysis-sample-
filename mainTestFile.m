@@ -3,8 +3,15 @@ clc;
 close all;
 
 % loads the als_clinical csv file
-data = readtable('als_clinical.csv');
-if(isempty(data))
+filename =  input('Enter the ALS Clinical CSV file you would like to use: ', 's');
+% checks if the csv file exists and has the correct columns
+if exist(filename, 'file') && endsWith(filename, '.csv')
+    data = readtable(filename);
+    if(isempty(data.PatientID) || isempty(data.TimeMonths) || isempty(data.ALSFRS_R) || isempty(data.FVC) || isempty(data.Status))
+        fprintf("one or more of the required columns does not exist");
+        return;
+    end 
+else
 	fprintf("No data table");
 	return;
 end
@@ -249,3 +256,4 @@ if ~isempty(baselineVals)
     title('Kaplan–Meier Survival by Baseline Motor Proxy');
     grid on;
 end
+
